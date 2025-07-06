@@ -2,7 +2,7 @@ interface Something {
     penguin: number;
 };
 
-async function doSomething(): Promise<any> {
+async function fetchData(): Promise<any> {
     // ...
 
     const response = await fetch("https://pingwin.com/api/v1/clone/abcdef");
