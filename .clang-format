@@ -11,6 +11,7 @@ UseTab: Never
 ColumnLimit: 80
 
 AccessModifierOffset: -4
+AlignAfterOpenBracket: AlwaysBreak
 #AlignEscapedNewlines: LeftWithLastLine
 AlignConsecutiveAssignments: true
 AlignOperands: AlignAfterOperator

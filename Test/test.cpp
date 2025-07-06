@@ -14,11 +14,12 @@ namespace Hydra::Labs::Test {
     namespace AsyncWebsocket {
         void ResetAllFlags();
         void ResetAllHandles();
-        void StaticCallback(HINTERNET handle,
-                            DWORD_PTR context,
-                            DWORD code,
-                            void* info,
-                            DWORD length);
+        void StaticCallback(
+            HINTERNET handle,
+            DWORD_PTR context,
+            DWORD code,
+            void* info,
+            DWORD length);
 
         HANDLE connectedEvent;
 
@@ -29,19 +30,21 @@ namespace Hydra::Labs::Test {
         static constexpr auto kDefaultWebsocketTimeoutMs = 5000;
     }
 
-    static bool EstablishWebsocketConnection(const std::wstring& serverName,
-                                             INTERNET_PORT serverPort,
-                                             const std::wstring& path) {
+    static bool EstablishWebsocketConnection(
+        const std::wstring& serverName,
+        INTERNET_PORT serverPort,
+        const std::wstring& path) {
         std::cout << "Attempting to establish connection..." << std::endl;
 
         AsyncWebsocket::ResetAllFlags();
         AsyncWebsocket::ResetAllHandles();
 
-        HINTERNET session = WinHttpOpen(L"AsyncWebsocket/0.1.0",
-                                        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-                                        WINHTTP_NO_PROXY_NAME,
-                                        WINHTTP_NO_PROXY_BYPASS,
-                                        WINHTTP_FLAG_ASYNC);
+        HINTERNET session = WinHttpOpen(
+            L"AsyncWebsocket/0.1.0",
+            WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
+            WINHTTP_NO_PROXY_NAME,
+            WINHTTP_NO_PROXY_BYPASS,
+            WINHTTP_FLAG_ASYNC);
         if (!session) {
             std::cout << "Failed to open WinHttp session: " << GetLastError()
                       << std::endl;
@@ -90,11 +93,11 @@ namespace Hydra::Labs::Test {
             return false;
         }
 
-        const auto callbackResult =
-            WinHttpSetStatusCallback(request,
-                                     AsyncWebsocket::StaticCallback,
-                                     WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS,
-                                     0);
+        const auto callbackResult = WinHttpSetStatusCallback(
+            request,
+            AsyncWebsocket::StaticCallback,
+            WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS,
+            0);
 
         if (callbackResult == WINHTTP_INVALID_STATUS_CALLBACK) {
             std::cout << "Failed to set callback: " << GetLastError()
@@ -107,13 +110,14 @@ namespace Hydra::Labs::Test {
             return false;
         }
 
-        success = WinHttpSendRequest(request,
-                                     WINHTTP_NO_ADDITIONAL_HEADERS,
-                                     0,
-                                     WINHTTP_NO_REQUEST_DATA,
-                                     0,
-                                     0,
-                                     NULL);
+        success = WinHttpSendRequest(
+            request,
+            WINHTTP_NO_ADDITIONAL_HEADERS,
+            0,
+            WINHTTP_NO_REQUEST_DATA,
+            0,
+            0,
+            NULL);
         if (!success) {
             std::cout << "Failed to send request: " << GetLastError()
                       << std::endl;
@@ -135,11 +139,11 @@ namespace Hydra::Labs::Test {
             WebsocketConnectionFailed,
         };
 
-        const auto result =
-            WaitForMultipleObjects(static_cast<DWORD>(events.size()),
-                                   events.data(),
-                                   FALSE,
-                                   kDefaultWebsocketTimeoutMs);
+        const auto result = WaitForMultipleObjects(
+            static_cast<DWORD>(events.size()),
+            events.data(),
+            FALSE,
+            kDefaultWebsocketTimeoutMs);
 
         switch (result) {
         case WebsocketConnected: {
